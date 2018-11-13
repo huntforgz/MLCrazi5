@@ -1,3 +1,9 @@
+'''
+Created on 2018-11-12
+
+@author: Zhaoyu Sun
+'''
+
 class FeatureCompute(object):
 
     '''
@@ -136,3 +142,16 @@ class FeatureCompute(object):
         response = np.append(response, neg_label)
         response.reshape(-1, 1)
         return (trainData, response)
+
+    def initialize(self):
+        self._initFeatureSet()
+        self._learnVocabulary()
+
+    def generatePhi(self, img):
+        self._calcSiftFeature(img)
+        try:
+            labels, centers = np.load(self.dir + "/vocabulary/" + "bow.npy")
+        except Exception as e:
+            print("No Vocabulary file!!")
+        featVec = self.calcFeatVec(features, centers)
+        return featVec
