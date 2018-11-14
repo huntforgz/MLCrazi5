@@ -3,9 +3,11 @@ Created on 2018-11-12
 
 @author: Zhaoyu Sun
 '''
+
+
 import cv2 as cv
 import numpy as np
-
+import os
 
 class FeatureCompute(object):
 
@@ -13,7 +15,6 @@ class FeatureCompute(object):
 	A class generate feature vector for image or subimage by SIFT and BOW.
 
 	Var:
-		dir: current direcotry
 		num_phi: # of SIFT feature points
 		num_img: # of images
 		wordCnt: dimension of final output
@@ -27,9 +28,9 @@ class FeatureCompute(object):
 		learnVocabulary
 	'''
 
-	def __init__(self, dir, num_img, num_phi = 200,
+	def __init__(self, num_img, num_phi = 200,
 				 wordCnt=50, iterTime=20, explosion=0.1):
-		self.dir = dir
+		self.dir = os.getcwd()
 		self.num_phi = num_phi
 		self.num_img = num_img
 		self.wordCnt = wordCnt
@@ -85,7 +86,7 @@ class FeatureCompute(object):
 		filename = self.dir + "/features/" + "phi.npy"
 		try:
 			features = np.load(filename)
-		except :
+		except Exception as e:
 			print("SIFT feature file doesn't exist!!!")
 		print("Learn vocabulary ...")
 		# use k-means to implement BOW
@@ -94,7 +95,8 @@ class FeatureCompute(object):
 		flags = cv.KMEANS_RANDOM_CENTERS
 		# PP_Center??
 		compactness, labels, centers = cv.kmeans(features, self.wordCnt, None,
-												 criteria, self.iterTime, flags)
+												 criteria, self.iterTime,
+												 flags)
 		filename = self.dir + "/vocabulary/" + "bow.npy"
 		np.save(filename, (labels, centers))
 		print("Finish BOW\n")
@@ -121,6 +123,14 @@ class FeatureCompute(object):
 		return featVec
 
 	def generateTrainData(self, num_pos, num_neg):
+		'''
+			Function to generate train data to train your classifier
+			Params:
+				num_pos: # of positive samples
+				num_neg: # of negative samples
+			Returns:
+				Tuple: (trainData, Lables)
+		'''
 		trainData = np.float32([]).reshape(0, 50)
 		response = np.float32([])
 		try:
@@ -128,7 +138,8 @@ class FeatureCompute(object):
 		except Exception as e:
 			print("No Vocabulary file!!")
 		for count in range(num_pos):
-			filename = self.dir + "/TrainingData/Positive" + str(count + 1) + '.jpg'
+			filename = (self.dir + "/TrainingData/Positive" + str(count + 1) +
+						'.jpg')
 			img = cv.imread(filename)
 			features = self.calcSiftFeature(img)
 			featVec = self.calcFeatVec(features, centers)
@@ -136,7 +147,8 @@ class FeatureCompute(object):
 		pos_label = np.repeat(np.float32([1]), count)
 		response = np.append(response, pos_label)
 		for count in range(num_neg):
-			filename = self.dir + "/TrainingData/Negative" + str(count + 1) + '.jpg'
+			filename = (self.dir + "/TrainingData/Negative" + str(count + 1) +
+						'.jpg')
 			img = cv.imread(filename)
 			features = self.calcSiftFeature(img)
 			featVec = self.calcFeatVec(features, centers)
@@ -144,14 +156,26 @@ class FeatureCompute(object):
 		neg_label = np.repeat(np.float32([0],count))
 		response = np.append(response, neg_label)
 		response.reshape(-1, 1)
-		return (trainData, response)
+		return trainData, response
 
 	def initialize(self):
+		'''
+			Function to initialize and create file
+			Run this Function Firstly before you train your classifier!
+		'''
 		self._initFeatureSet()
 		self._learnVocabulary()
 
 	def generatePhi(self, img):
-		self._calcSiftFeature(img)
+		'''
+			Function to generate 1 * wordCnt feature vector for any image or
+			subimage
+			Params:
+				image
+			Returns:
+				1 * wordCnt feature vector
+		'''
+		feature = self._calcSiftFeature(img)
 		try:
 			labels, centers = np.load(self.dir + "/vocabulary/" + "bow.npy")
 		except Exception as e:
