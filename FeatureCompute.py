@@ -14,25 +14,33 @@ class FeatureCompute(object):
 	'''
 	A class generate feature vector for image or subimage by SIFT and BOW.
 
+	Each time you assign change the number of SIFT feature points or other
+	params of BOW,you need to run initialize function firstly.
+
+	An advice, the number of SIFT feature points should not be less than 120,
+	and for BOW, it is a K-Means aggregate essentaly, so be sure you are
+	familiar with K-Means.
+
+	I design a method to offer you training data, both positive and negative.
+	I also implement a method to generate a feature vector for each image or
+	subimage based on you vocabulary.
+
+	Except initialize, generatePhi, generateTrainData, other functions are all
+	private, please don't modify it by yourself. If you get new idea or want to
+	do some optimization, please inform me firstly.If you want to nosetest some
+	function, please implement another test file on your server.
+
 	Var:
 		num_phi: # of SIFT feature points
-		num_img: # of images
 		wordCnt: dimension of final output
 		iterTime: parameter for cv.Kmeans,iteration times
 		explosion: parameter for cv.Kmeans,tolerance
-
-	Func:
-		calcSiftFeature
-		calcFeatVec
-		initFeatureSet
-		learnVocabulary
 	'''
 
-	def __init__(self, num_img, num_phi = 200,
+	def __init__(self, num_phi = 200,
 				 wordCnt=50, iterTime=20, explosion=0.1):
 		self.dir = os.getcwd()
 		self.num_phi = num_phi
-		self.num_img = num_img
 		self.wordCnt = wordCnt
 		self.iterTime = iterTime
 		self.explosion = explosion
@@ -45,9 +53,9 @@ class FeatureCompute(object):
 		Returns:
 			n * 128 ndarray, n equals to num_phi
 		'''
-		gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+		#gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 		sift = cv.xfeatures2d_SIFT.create(self.num_phi)
-		kp, des = sift.detectAndCompute(gray, None)
+		kp, des = sift.detectAndCompute(img, None)
 		return des
 
 	def _initFeatureSet(self):
@@ -59,18 +67,21 @@ class FeatureCompute(object):
 		Returns:
 			None
 		'''
+		name = (str(self.wordCnt) + '_' + str(self.iterTime) + '_' +
+			    str(self.explosion))
 		featureSet = np.float32([]).reshape(0,128)
 		print("Extract features from TrainSet :\n")
-		for count in range(self.num_img):
-			filename = self.dir + "/Image/" + str(count + 1) + '.jpg'
+		num_img = len([img for img in os.listdir(self.dir + '/Image')]) - 1
+		for count in range(num_img):
+			filename = self.dir + "/Image/" + str(count) + '.jpg'
 			img = cv.imread(filename)
-			des = calcSiftFeature(img)
+			des = self._calcSiftFeature(img)
 			featureSet = np.append(featureSet, des, axis=0)
 			featCnt = featureSet.shape[0]
 		print(str(featCnt) + " features in "
-			+ str(self.num_img) + " images\n")
+			+ str(num_img) + " images\n")
 		# save featureSet to file
-		filename = self.dir + "/features/" + "phi.npy"
+		filename = self.dir + "/Features/" + name + "_phi.npy"
 		np.save(filename, featureSet)
 		print("Finsh Initializing Phi")
 
@@ -83,7 +94,9 @@ class FeatureCompute(object):
 		Returns:
 			None
 		'''
-		filename = self.dir + "/features/" + "phi.npy"
+		name = (str(self.wordCnt) + '_' + str(self.iterTime) + '_' +
+			    str(self.explosion))
+		filename = self.dir + "/Features/" + name + "_phi.npy"
 		try:
 			features = np.load(filename)
 		except Exception as e:
@@ -97,11 +110,11 @@ class FeatureCompute(object):
 		compactness, labels, centers = cv.kmeans(features, self.wordCnt, None,
 												 criteria, self.iterTime,
 												 flags)
-		filename = self.dir + "/vocabulary/" + "bow.npy"
+		filename = self.dir + "/Vocabulary/" + name + "_bow.npy"
 		np.save(filename, (labels, centers))
 		print("Finish BOW\n")
 
-	def _calcFeatVec(self, feature, centers):
+	def _calcFeatVec(self, features, centers):
 		'''
 		Method to compute feature vector for each image/subimage
 		Params:
@@ -114,7 +127,7 @@ class FeatureCompute(object):
 		featVec = np.zeros((1, self.wordCnt))
 		for i in range(0, features.shape[0]):
 			fi = features[i]
-			diffMat = np.tile(fi, (50, 1)) - centers
+			diffMat = np.tile(fi, (self.wordCnt, 1)) - centers
 			sqSum = (diffMat**2).sum(axis=1)
 			dist = sqSum**0.5
 			sortedIndices = dist.argsort()
@@ -122,7 +135,7 @@ class FeatureCompute(object):
 			featVec[0][idx] += 1
 		return featVec
 
-	def generateTrainData(self, num_pos, num_neg):
+	def generateTrainData(self):
 		'''
 			Function to generate train data to train your classifier
 			Params:
@@ -130,38 +143,52 @@ class FeatureCompute(object):
 				num_neg: # of negative samples
 			Returns:
 				Tuple: (trainData, Lables)
+				trainData: wordCnt * m matrix, m: # of trainging images
+				Labels: m * 1 matrix, m: # of trainging images
 		'''
-		trainData = np.float32([]).reshape(0, 50)
+		name = (str(self.wordCnt) + '_' + str(self.iterTime) + '_' +
+			    str(self.explosion))
+		trainData = np.float32([]).reshape(0,self.wordCnt)
 		response = np.float32([])
 		try:
-			labels, centers = np.load(self.dir + "/vocabulary/" + "bow.npy")
+			labels, centers = np.load(self.dir + "/Vocabulary/" +
+									name + "_bow.npy")
 		except Exception as e:
 			print("No Vocabulary file!!")
+		num_pos = len([img for img in os.listdir(self.dir +
+												'/positive sample')]) - 1
 		for count in range(num_pos):
-			filename = (self.dir + "/TrainingData/Positive" + str(count + 1) +
-						'.jpg')
+			filename = (self.dir + "/positive sample/" + str(count) + '.jpg')
+			print(filename)
 			img = cv.imread(filename)
-			features = self.calcSiftFeature(img)
-			featVec = self.calcFeatVec(features, centers)
+			features = self._calcSiftFeature(img)
+			featVec = self._calcFeatVec(features, centers)
 			trainData = np.append(trainData, featVec, axis=0)
-		pos_label = np.repeat(np.float32([1]), count)
+		pos_label = np.repeat(np.float32([1]), count + 1)
 		response = np.append(response, pos_label)
+		num_neg = len([img for img in os.listdir(self.dir +
+												'/negative sample')]) - 1
 		for count in range(num_neg):
-			filename = (self.dir + "/TrainingData/Negative" + str(count + 1) +
-						'.jpg')
+			filename = (self.dir + "/negative sample/" + str(count) + '.jpg')
+			print(filename)
 			img = cv.imread(filename)
-			features = self.calcSiftFeature(img)
-			featVec = self.calcFeatVec(features, centers)
+			features = self._calcSiftFeature(img)
+			featVec = self._calcFeatVec(features, centers)
 			trainData = np.append(trainData, featVec, axis=0)
-		neg_label = np.repeat(np.float32([0],count))
+		neg_label = np.repeat(np.float32([0]),count + 1)
 		response = np.append(response, neg_label)
 		response.reshape(-1, 1)
-		return trainData, response
+		return trainData.T, response
 
 	def initialize(self):
 		'''
 			Function to initialize and create file
 			Run this Function Firstly before you train your classifier!
+
+			Params:
+				None
+			Returns:
+				None
 		'''
 		self._initFeatureSet()
 		self._learnVocabulary()
@@ -173,12 +200,15 @@ class FeatureCompute(object):
 			Params:
 				image
 			Returns:
-				1 * wordCnt feature vector
+				wordCnt * 1 feature vector
 		'''
-		feature = self._calcSiftFeature(img)
+		name = (str(self.wordCnt) + '_' + str(self.iterTime) + '_' +
+			    str(self.explosion))
+		features = self._calcSiftFeature(img)
 		try:
-			labels, centers = np.load(self.dir + "/vocabulary/" + "bow.npy")
+			labels, centers = np.load(self.dir + "/Vocabulary/" +
+									  name + "_bow.npy")
 		except Exception as e:
 			print("No Vocabulary file!!")
-		featVec = self.calcFeatVec(features, centers)
-		return featVec
+		featVec = self._calcFeatVec(features, centers)
+		return featVec.T
