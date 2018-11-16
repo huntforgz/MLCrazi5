@@ -8,6 +8,7 @@ Created on 2018-11-12
 import cv2 as cv
 import numpy as np
 import os
+import datetime
 
 class FeatureCompute(object):
 
@@ -37,8 +38,8 @@ class FeatureCompute(object):
 		explosion: parameter for cv.Kmeans,tolerance
 	'''
 
-	def __init__(self, num_phi = 200,
-				 wordCnt=50, iterTime=40, explosion=0.01):
+	def __init__(self, num_phi = 300,
+				 wordCnt=60, iterTime=40, explosion=0.01):
 		self.dir = os.getcwd()
 		self.num_phi = num_phi
 		self.wordCnt = wordCnt
@@ -215,9 +216,13 @@ class FeatureCompute(object):
 
 if __name__ == '__main__':
 	generate = FeatureCompute()
-	# generate.initialize()
+	#generate.initialize()
 	x, y = generate.generateTrainData()
 	print(x.shape)
 	print(y.shape)
-	np.save('TrData.npy', x)
-	np.save('TrLabel.npy', y)
+	np.save(('TrainData/TrData' +
+			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+			+ '.npy'), x)
+	np.save(('TrainData/TrLabel' +
+			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+			+ '.npy'), y)
