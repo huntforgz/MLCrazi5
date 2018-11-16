@@ -38,7 +38,7 @@ class FeatureCompute(object):
 	'''
 
 	def __init__(self, num_phi = 200,
-				 wordCnt=50, iterTime=20, explosion=0.1):
+				 wordCnt=50, iterTime=40, explosion=0.01):
 		self.dir = os.getcwd()
 		self.num_phi = num_phi
 		self.wordCnt = wordCnt
@@ -156,9 +156,9 @@ class FeatureCompute(object):
 		except Exception as e:
 			print("No Vocabulary file!!")
 		num_pos = len([img for img in os.listdir(self.dir +
-												'/positive sample')]) - 1
+												'/PositiveSample')]) - 1
 		for count in range(num_pos):
-			filename = (self.dir + "/positive sample/" + str(count) + '.jpg')
+			filename = (self.dir + "/PositiveSample/" + str(count) + '.jpg')
 			print(filename)
 			img = cv.imread(filename)
 			features = self._calcSiftFeature(img)
@@ -167,9 +167,9 @@ class FeatureCompute(object):
 		pos_label = np.repeat(np.float32([1]), count + 1)
 		response = np.append(response, pos_label)
 		num_neg = len([img for img in os.listdir(self.dir +
-												'/negative sample')]) - 1
+												'/NegativeSample')]) - 1
 		for count in range(num_neg):
-			filename = (self.dir + "/negative sample/" + str(count) + '.jpg')
+			filename = (self.dir + "/NegativeSample/" + str(count) + '.jpg')
 			print(filename)
 			img = cv.imread(filename)
 			features = self._calcSiftFeature(img)
@@ -212,3 +212,12 @@ class FeatureCompute(object):
 			print("No Vocabulary file!!")
 		featVec = self._calcFeatVec(features, centers)
 		return featVec.T
+
+if __name__ == '__main__':
+	generate = FeatureCompute()
+	# generate.initialize()
+	x, y = generate.generateTrainData()
+	print(x.shape)
+	print(y.shape)
+	np.save('TrData.npy', x)
+	np.save('TrLabel.npy', y)
