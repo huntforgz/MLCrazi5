@@ -39,7 +39,7 @@ class FeatureCompute(object):
 	'''
 
 	def __init__(self, num_phi = 300,
-				 wordCnt=60, iterTime=40, explosion=0.01):
+				 wordCnt=80, iterTime=40, explosion=0.01):
 		self.dir = os.getcwd()
 		self.num_phi = num_phi
 		self.wordCnt = wordCnt
@@ -216,7 +216,7 @@ class FeatureCompute(object):
 
 if __name__ == '__main__':
 	generate = FeatureCompute()
-	#generate.initialize()
+	generate.initialize()
 	x, y = generate.generateTrainData()
 	print(x.shape)
 	print(y.shape)
