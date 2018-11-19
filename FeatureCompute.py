@@ -39,7 +39,7 @@ class FeatureCompute(object):
 	'''
 
 	def __init__(self, num_phi = 300,
-				 wordCnt=70, iterTime=40, explosion=0.01):
+				 wordCnt=60, iterTime=60, explosion=0.01):
 		self.dir = os.getcwd()
 		self.num_phi = num_phi
 		self.wordCnt = wordCnt
