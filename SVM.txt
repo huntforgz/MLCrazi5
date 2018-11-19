@@ -1,7 +1,7 @@
 SVM
 
 Best Parameters
-C	1.5
+C	2.0
 degree	1
 kernel	rbf
 max_iter	2000
@@ -9,18 +9,18 @@ random_state	1
 tol	0.0005
 
 Confusion Matrix
-89	10	
-15	69	
+98	10	
+16	78	
 
 Model Result
               precision    recall  f1-score   support
 
-         0.0       0.86      0.90      0.88        99
-         1.0       0.87      0.82      0.85        84
+         0.0       0.86      0.91      0.88       108
+         1.0       0.89      0.83      0.86        94
 
-   micro avg       0.86      0.86      0.86       183
-   macro avg       0.86      0.86      0.86       183
-weighted avg       0.86      0.86      0.86       183
+   micro avg       0.87      0.87      0.87       202
+   macro avg       0.87      0.87      0.87       202
+weighted avg       0.87      0.87      0.87       202
 
 
 
