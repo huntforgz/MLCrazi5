@@ -13,7 +13,7 @@ from sklearn.linear_model import LogisticRegression as LR
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier as DTC
 from sklearn.svm import SVC
-from xgboost import XGBClassifier
+#from xgboost import XGBClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.neural_network import MLPClassifier as MLP
 
@@ -26,18 +26,18 @@ import multiprocessing
 
 writefile = 'TrainingResult.txt'
 
-filename = 'SVM.sav'
-# load the model from disk
-loaded_model = pickle.load(open(filename, 'r'))
+# filename = 'SVM.sav'
+# # load the model from disk
+# loaded_model = pickle.load(open(filename, 'r'))
 
-class TrainingModel:
-    def Predict(X, ModelName):
+class TrainingModel():
+    def Predict(self, X, ModelName):
         X = preprocessing.scale(X)
         try:
-            loaded_model = pickle.load(open(ModelName, 'r'))
+            loaded_model = pickle.load(open(ModelName, 'rb'))
             returnVector = loaded_model.decision_function(X)
             return returnVector
-        except:
+        except Exception as e:
             print("choose among SVM.sav AdaBoost.sav and RandomForest.sav")
+            print(e)
             return
-    

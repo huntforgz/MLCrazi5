@@ -1,16 +1,19 @@
 import cv2 as cv
 
-maxReg = 1000 # max # of bounding box
+maxReg = 2000 # max # of bounding box
 
 def regionGenerate(img):
     rects = imgSegment(img)
+    res = []
     for i, rect in enumerate(rects):
-        if i < maxReg:
-            x,y,w,h = rect
-            res = img[x:x+w,y:y+h]
-            yeild(res)
+        x, y, w, h = rect
+        if i < max and w > 200 and h > 200:
+            bb = img[y:y+h,x:x+w]
+            temp = ([x,y,w,h],bb)
+            res.append(temp)
         else:
             break
+    return res
 
 
 def imgSegment(img):
@@ -30,3 +33,16 @@ def imgSegment(img):
     # run selective search segmentation on input image
     rects = ss.process()
     return rects
+
+# if __name__ == '__main__':
+#     filename = '78.jpg'
+#     img = cv.imread(filename)
+#     print(img.shape)
+#     regions = imgSegment(img)
+#     i = 0
+#     for i, rect in enumerate(regions):
+#         if i < maxReg:
+#             x,y,w,h = rect
+#             bb = img[y:y+h,x:x+w]
+#             a = cv.imwrite(('bbs/' + str(i) + '.jpg'),bb)
+#             print(a)

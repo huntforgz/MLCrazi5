@@ -126,15 +126,18 @@ class FeatureCompute(object):
 		# feature: sift feature, m * 128 vector, m = # of feature points
 		# centers: k-means centers
 		featVec = np.zeros((1, self.wordCnt))
-		for i in range(0, features.shape[0]):
-			fi = features[i]
-			diffMat = np.tile(fi, (self.wordCnt, 1)) - centers
-			sqSum = (diffMat**2).sum(axis=1)
-			dist = sqSum**0.5
-			sortedIndices = dist.argsort()
-			idx = sortedIndices[0] # index of the nearest center
-			featVec[0][idx] += 1
-		return featVec
+		if features is None:
+			return featVec
+		else:
+			for i in range(0, features.shape[0]):
+				fi = features[i]
+				diffMat = np.tile(fi, (self.wordCnt, 1)) - centers
+				sqSum = (diffMat**2).sum(axis=1)
+				dist = sqSum**0.5
+				sortedIndices = dist.argsort()
+				idx = sortedIndices[0] # index of the nearest center
+				featVec[0][idx] += 1
+			return featVec
 
 	def generateTrainData(self):
 		'''
@@ -157,9 +160,9 @@ class FeatureCompute(object):
 		except Exception as e:
 			print("No Vocabulary file!!")
 		num_pos = len([img for img in os.listdir(self.dir +
-												'/PositiveSample')]) - 1
+												'/1127PositiveGray/1127PositiveGray')]) - 1
 		for count in range(num_pos):
-			filename = (self.dir + "/PositiveSample/" + str(count) + '.jpg')
+			filename = (self.dir + "/1127PositiveGray/1127PositiveGray/" + str(count) + '.jpg')
 			print(filename)
 			img = cv.imread(filename)
 			features = self._calcSiftFeature(img)
@@ -168,9 +171,9 @@ class FeatureCompute(object):
 		pos_label = np.repeat(np.float32([1]), count + 1)
 		response = np.append(response, pos_label)
 		num_neg = len([img for img in os.listdir(self.dir +
-												'/NegativeSample')]) - 1
+												'/1127NegativeGray/1127NegativeGray')]) - 1
 		for count in range(num_neg):
-			filename = (self.dir + "/NegativeSample/" + str(count) + '.jpg')
+			filename = (self.dir + "/1127NegativeGray/1127NegativeGray/" + str(count) + '.jpg')
 			print(filename)
 			img = cv.imread(filename)
 			features = self._calcSiftFeature(img)
@@ -212,11 +215,11 @@ class FeatureCompute(object):
 		except Exception as e:
 			print("No Vocabulary file!!")
 		featVec = self._calcFeatVec(features, centers)
-		return featVec.T
+		return featVec
 
 if __name__ == '__main__':
 	generate = FeatureCompute()
-	generate.initialize()
+	#generate.initialize()
 	x, y = generate.generateTrainData()
 	print(x.shape)
 	print(y.shape)
