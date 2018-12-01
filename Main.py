@@ -10,6 +10,10 @@ import datetime
 import os
 import operator as op
 
+def nms():
+    pass
+
+
 if __name__ == '__main__':
     while (1):
         object = input("detect object:")
@@ -26,30 +30,27 @@ if __name__ == '__main__':
         generator = FeatureCompute(300,70)
         dir = os.getcwd()
         for count in range(len(os.listdir())):
-            filename = dir + '/' + str(count) + '.jpg'
+            filename = dir + '/TestData/'+ para + '/' + str(count) + '.jpg'
             img = cv.imread(filename)
             print(filename)
-            plt.imshow(img),plt.show()
+            cv.imshow('show', img)
+            cv.waitKey(0)
             regions = regionGenerate(img)
-            data = np.float32([]).reshape(0,Generator.wordCnt)
+            data = np.float32([]).reshape(0,generator.wordCnt)
             for rect in regions:
-                phi = generator.generatePhi(rect(1), para)
+                phi = generator.generatePhi(rect[1], para)
                 data = np.append(data, phi, axis=0)
-            '''
-            get response from predictor
-
-            i = max()....
-
-            '''
-            ModelName = 'SVM.sav' # temporarily fixed
+            ModelName = ' SVM.sav' # temporarily fixed
             # please choose models listed in ClassifierModel
             data = np.mat(data)
             TM = CM.TrainingModel()
+            # print(data.shape)
             result = TM.Predict(data, ModelName)
             # result is a one dimension vector
-            
-            locaiton = regions[i][0]
-            cv2.rectangle(img, (location[0],location[1]),
-                         (location[2],location[3]),
-                         (0,255,0), 4)
-            plt.imshow(img),plt.show()
+            i = np.argmax(result)
+            location = regions[i][0]
+            cv.rectangle(img, (location[0],location[1]),
+                         (location[0] + location[2],location[1] + location[3]),
+                         (0,255,0), 1)
+            cv.imshow('show', img)
+            cv.waitKey(0)

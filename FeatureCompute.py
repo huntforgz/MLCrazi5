@@ -71,12 +71,13 @@ class FeatureCompute(object):
 		name = (str(self.wordCnt) + '_' + str(self.iterTime) + '_' +
 			    str(self.explosion))
 		featureSet = np.float32([]).reshape(0,128)
-		print("Extract features from TrainSet :\n")
-		num_img = ([img for img in os.listdir(self.dir + '/Image/'
+		print("Extract features from TrainSet :")
+		num_img = len([img for img in os.listdir(self.dir + '/Image/'
 											+ labels)]) - 1
 		for count in range(num_img):
 			filename = (self.dir + "/Image/" + labels + '/' +
 						str(count) + '.jpg')
+			print(filename)
 			img = cv.imread(filename)
 			des = self._calcSiftFeature(img)
 			featureSet = np.append(featureSet, des, axis=0)
@@ -84,8 +85,8 @@ class FeatureCompute(object):
 		print(str(featCnt) + " features in "
 			+ str(num_img) + ' ' + labels + " images\n")
 		# save featureSet to file
-		filename = (self.dir + "/Features/" + labels + '\' +
-				    name + "_phi.npy")
+		filename = (self.dir + "/Features/" + labels + '/' +
+					name + "_phi.npy")
 		np.save(filename, featureSet)
 		print("Finsh Initializing Phi")
 
@@ -158,14 +159,14 @@ class FeatureCompute(object):
 		trainData = np.float32([]).reshape(0,self.wordCnt)
 		response = np.float32([])
 		try:
-			labels, centers = np.load(self.dir + "/Vocabulary/" + lables + '/'
-									name + "_bow.npy")
+			labels, centers = np.load((self.dir + "/Vocabulary/" + lables
+										+ '/' + name + "_bow.npy"))
 		except Exception as e:
 			print("No Vocabulary file!!")
 		num_pos = len([img for img in os.listdir(self.dir + '/PositiveSample/'
 												+ labels)]) - 1
 		for count in range(num_pos):
-			filename = (self.dir + "/PositiveSample/" + labels + '/'
+			filename = (self.dir + "/PositiveSample/" + labels + '/' +
 						str(count) + '.jpg')
 			print(filename)
 			img = cv.imread(filename)
@@ -189,7 +190,7 @@ class FeatureCompute(object):
 		response.reshape(-1, 1)
 		return trainData.T, response
 
-	def initialize(self):
+	def initialize(self, labels):
 		'''
 			Function to initialize and create file
 			Run this Function Firstly before you train your classifier!
@@ -199,8 +200,8 @@ class FeatureCompute(object):
 			Returns:
 				None
 		'''
-		self._initFeatureSet()
-		self._learnVocabulary()
+		self._initFeatureSet(labels)
+		self._learnVocabulary(labels)
 
 	def generatePhi(self, img, labels):
 		'''
@@ -216,7 +217,7 @@ class FeatureCompute(object):
 		features = self._calcSiftFeature(img)
 		try:
 			labels, centers = np.load(self.dir + "/Vocabulary/" + labels + '/'
-									  name + "_bow.npy")
+									   + name + "_bow.npy")
 		except Exception as e:
 			print("No Vocabulary file!!")
 		featVec = self._calcFeatVec(features, centers)
@@ -224,13 +225,13 @@ class FeatureCompute(object):
 
 if __name__ == '__main__':
 	generate = FeatureCompute()
-	#generate.initialize()
-	x, y = generate.generateTrainData()
-	print(x.shape)
-	print(y.shape)
-	np.save(('TrainData/TrData' +
-			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-			+ '.npy'), x)
-	np.save(('TrainData/TrLabel' +
-			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-			+ '.npy'), y)
+	generate.initialize('Toy')
+	# x, y = generate.generateTrainData('Toy')
+	# print(x.shape)
+	# print(y.shape)
+	# np.save(('TrainData/TrData' +
+	# 		datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	# 		+ '.npy'), x)
+	# np.save(('TrainData/TrLabel' +
+	# 		datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	# 		+ '.npy'), y)

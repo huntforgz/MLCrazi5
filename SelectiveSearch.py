@@ -1,13 +1,13 @@
 import cv2 as cv
 
-maxReg = 2000 # max # of bounding box
+maxReg = 1000 # max # of bounding box
 
 def regionGenerate(img):
     rects = imgSegment(img)
     res = []
     for i, rect in enumerate(rects):
         x, y, w, h = rect
-        if i < max and w > 200 and h > 200:
+        if i < maxReg and w > 50 and h > 50:
             bb = img[y:y+h,x:x+w]
             temp = ([x,y,w,h],bb)
             res.append(temp)
@@ -34,15 +34,15 @@ def imgSegment(img):
     rects = ss.process()
     return rects
 
-# if __name__ == '__main__':
-#     filename = '78.jpg'
-#     img = cv.imread(filename)
-#     print(img.shape)
-#     regions = imgSegment(img)
-#     i = 0
-#     for i, rect in enumerate(regions):
-#         if i < maxReg:
-#             x,y,w,h = rect
-#             bb = img[y:y+h,x:x+w]
-#             a = cv.imwrite(('bbs/' + str(i) + '.jpg'),bb)
-#             print(a)
+if __name__ == '__main__':
+    filename = '0.jpg'
+    img = cv.imread(filename)
+    print(img.shape)
+    regions = imgSegment(img)
+    i = 0
+    for i, rect in enumerate(regions):
+        if i < maxReg:
+            x,y,w,h = rect
+            bb = img[y:y+h,x:x+w]
+            a = cv.imwrite(('bbs/' + str(i) + '.jpg'),bb)
+            print(a)
