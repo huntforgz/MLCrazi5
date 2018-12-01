@@ -26,18 +26,23 @@ import multiprocessing
 
 writefile = 'TrainingResult.txt'
 
-# filename = 'SVM.sav'
-# # load the model from disk
-# loaded_model = pickle.load(open(filename, 'r'))
+# please pick names among models below
+Decision = ['SVM.sav', 'LakerSVM.sav']
+Probability = ['KNN.sav', 'DT.sav', 'LR.sav', 'AdaBoost.sav', 'RandomForest.sav', 'LakerAdaBoost.sav', 'LakerRandomForest.sav']
 
 class TrainingModel():
     def Predict(self, X, ModelName):
         X = preprocessing.scale(X)
         try:
             loaded_model = pickle.load(open(ModelName, 'rb'))
-            returnVector = loaded_model.decision_function(X)
+            if ModelName in Decision:
+                returnVector = loaded_model.decision_function(X)
+            elif ModelName in Probability:
+                returnVector = (loaded_model.predict_proba(X).T)[0].T
+                # I am not sure about which function should XGBoost call 
+                # yet, dont try it
             return returnVector
         except Exception as e:
-            print("choose among SVM.sav AdaBoost.sav and RandomForest.sav")
             print(e)
             return
+    

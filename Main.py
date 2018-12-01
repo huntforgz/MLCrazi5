@@ -2,6 +2,7 @@ from SelectiveSearch import regionGenerate
 #from ClassifierModel import TrainingModel
 from FeatureCompute import FeatureCompute
 import matplotlib.pyplot as plt
+import ClassifierModel as CM
 
 import numpy as np
 import cv2 as cv
@@ -40,6 +41,13 @@ if __name__ == '__main__':
             i = max()....
 
             '''
+            ModelName = 'SVM.sav' # temporarily fixed
+            # please choose models listed in ClassifierModel
+            data = np.mat(data)
+            TM = CM.TrainingModel()
+            result = TM.Predict(X, ModelName)
+            # result is a one dimension vector
+            
             locaiton = regions[i][0]
             cv2.rectangle(img, (location[0],location[1]),
                          (location[2],location[3]),
