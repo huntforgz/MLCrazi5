@@ -35,7 +35,7 @@ def imgSegment(img):
     return rects
 
 if __name__ == '__main__':
-    filename = '0.jpg'
+    filename = '1.jpg'
     img = cv.imread(filename)
     print(img.shape)
     regions = imgSegment(img)
@@ -44,5 +44,5 @@ if __name__ == '__main__':
         if i < maxReg:
             x,y,w,h = rect
             bb = img[y:y+h,x:x+w]
-            a = cv.imwrite(('bbs/' + str(i) + '.jpg'),bb)
+            a = cv.imwrite(('bbs_toy/' + str(i) + '.jpg'),bb)
             print(a)

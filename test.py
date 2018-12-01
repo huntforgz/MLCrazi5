@@ -7,18 +7,18 @@ from FeatureCompute import FeatureCompute
 if __name__ == '__main__':
     classifier = TrainingModel()
     generator = FeatureCompute(300,70)
-    dir = os.getcwd() + '/bbs'
+    dir = os.getcwd() + '/bbs_toy'
     data = np.float32([]).reshape(0,generator.wordCnt)
     for count in range(len(os.listdir(dir)) - 1):
         filename = dir + '/' + str(count) + '.jpg'
         print(filename)
         img = cv.imread(filename)
-        phi = generator.generatePhi(img, 'Lakers')
+        phi = generator.generatePhi(img, 'Toy')
         data = np.append(data, phi, axis=0)
     data = np.mat(data)
     print(data.shape)
     print(type(data))
-    response = classifier.Predict(data, 'LakerSVM.sav')
+    response = classifier.Predict(data, 'RandomForest.sav')
     print(response)
     print(type(response))
     i = np.argmax(response)

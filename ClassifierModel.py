@@ -38,7 +38,7 @@ class TrainingModel():
             if ModelName in Decision:
                 returnVector = loaded_model.decision_function(X)
             elif ModelName in Probability:
-                returnVector = (loaded_model.predict_proba(X).T)[0].T
+                returnVector = (loaded_model.predict_proba(X).T)[1].T
                 # I am not sure about which function should XGBoost call
                 # yet, dont try it
             return returnVector

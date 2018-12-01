@@ -40,7 +40,7 @@ if __name__ == '__main__':
             for rect in regions:
                 phi = generator.generatePhi(rect[1], para)
                 data = np.append(data, phi, axis=0)
-            ModelName = ' SVM.sav' # temporarily fixed
+            ModelName = 'SVM.sav' # temporarily fixed
             # please choose models listed in ClassifierModel
             data = np.mat(data)
             TM = CM.TrainingModel()
