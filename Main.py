@@ -45,7 +45,7 @@ if __name__ == '__main__':
             # please choose models listed in ClassifierModel
             data = np.mat(data)
             TM = CM.TrainingModel()
-            result = TM.Predict(X, ModelName)
+            result = TM.Predict(data, ModelName)
             # result is a one dimension vector
             
             locaiton = regions[i][0]
