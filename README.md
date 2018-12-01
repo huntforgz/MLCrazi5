@@ -12,10 +12,10 @@ FeatureCompute.py provides a method to generate Training Data to train your clas
 # Object Detection
 
 
-### Project Abstract
+## Project Abstract
 This project mainly implements Adaboost classifier with different learners to make a framework used to detect specific objects in the image(in demo we use NBA basketball team Lakers logo). Instead of using deep learning frame such as RCNN or CNN, we use SIFT method(with OpenCV) to extract features and bounding box method to detect potential target to improve time cost/performance. A bunch of objects, marked as positive or negative respectively, were later used to train our classifier. In the test stage, we sample some real world objects and try to detect them in photos.
 
-### What does Project do?
+## Project Introduction
 * Feature Selection with SIFT(OpenCV), including:
   - Movie Name, Genre, Publish Year
   - Poster, Video Preview
@@ -26,7 +26,7 @@ This project mainly implements Adaboost classifier with different learners to ma
   - TOP 10 similar unseen similar movies for every specified movie that the user is checking on
 * Support tracing each user's watching and rating history
 
-### Where does our dataset come from?
+## Dataset
 We fetched the “MovieLens 1M Dataset” which was released in February 2003 from
 [This Website](https://grouplens.org/datasets/movielens/)
 * It generally contains 1 million ratings from 6,000 users on 4,000 movies, in the format of CSV.
@@ -59,7 +59,7 @@ A preview of what's the data looks like is shown below<br/>
   <h6 align="center">Rating Dataset</h6><br/>
 </p><br/>
 
-### Algorithms
+## Methodology
 We have implemented three recommend algorithms in this project:
   - User based collaborate filtering
   - Item based collaborate filtering
@@ -84,7 +84,7 @@ Concepts are shown below as graphs:<br\>
   <h6 align="center">User-Based Collaborative Filtering</h6><br/>
 </p><br/>
 
-### Evaluation
+## Evaluation
 We used Root Mean Squared Error (RMSE) for evaluation:<br/>
 
 <p align="center">
@@ -98,13 +98,13 @@ And the evaluation result is:
 
 
 
-### DEMO Implement
+## DEMO Implement
 We used Python Django as backend to implement our project.
 1. Environment Setup: -- Windows 10, Python 3.6.4, mysql 5.7.21, mysql bench 6.3 CE
 2. Python Requirement Packages: -- numpy, pandas, imdbpie, imdbpy, sklearn
 3. App start up by: -- Python manage.py runserver 8080, Open in the browser 127.0.0.1:8080
 
-### Website Preview
+## Project Output
 <p align="center">
   <img src="demo0.png" height="350" width="800"><br/>
   <h6 align="center">Login Page</h6><br/>
