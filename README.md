@@ -54,7 +54,7 @@ The target in each experiment is shown in Figure 2 and 3, respectively.
 First, in the comparative experiment of Step2, we tune each classifier and compare them based on precision, recall and F1-Score. In practice, we prefer choosing the one with highest F1-Score rather than other metrices, because the F1 score is the harmonic average of the precision and recall.  
 The comparative result is shown in Fig.4:
 <p align="center">
-  <img src="/Image/result.jpg" height="350" width="400"><br/>
+  <img src="/Image/result.png" height="350" width="400"><br/>
   <h6 align="center">Figure 4: The result in the comparative experiment</h6><br/>
 </p><br/>
 
@@ -70,7 +70,7 @@ Secondly, for a new photos in the Step3, we consider the potential location of t
 ## Project Output
 
 <p align="center">
-  <img src="\Image\result.jpg" height="350" width="400"><br/>
+  <img src="\Image\result.png" height="350" width="400"><br/>
   <h6 align="center">Figure 5: Output of Detecting Lakers Logo</h6><br/>
 </p><br/>
 
