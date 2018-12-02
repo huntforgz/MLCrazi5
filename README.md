@@ -18,8 +18,8 @@ This project addresses the problem of detecting object location in object recogn
 ## Project Introduction
 
 <p align="center">
-  <img src="flowchart.pdf" height="350" width="800"><br/>
-  <h6 align="center">Login Page</h6><br/>
+  <img src="/image/flowchart.pdf" height="350" width="800"><br/>
+  <h6 align="center">Flowchart</h6><br/>
 </p><br/>
 
 * Feature Selection with SIFT(OpenCV), including:
