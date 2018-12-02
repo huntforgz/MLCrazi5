@@ -13,7 +13,8 @@ FeatureCompute.py provides a method to generate Training Data to train your clas
 
 
 ## Project Abstract
-This project addresses the problem of detecting object location in object recognition. More specifically, we implements general classifiers with special feature detection algorithm to make a framework used to detect specific object locations in the image(in demo we use NBA basketball team Lakers logo). Instead of using deep learning frame such as RCNN or CNN, we combine SIFT and BOW, Selective Search and general classifier models into a single framework to improve time cost/performance. A bunch of objects, marked as positive or negative respectively, were later used to train our classifier. In the test stage, we sample some real world objects and try to detect them in photos.
+This project addresses the problem of detecting object location in object recognition. We implements general classifiers with special feature detection algorithm to make a framework used to detect specific object locations in the image(in demo we use NBA basketball team Lakers logo). Instead of using deep learning frame such as RCNN or CNN, we combine SIFT and BOW, Selective Search and general classifier models into a single framework to improve time cost/performance. More specifically, we use NBA baskerball team Lakers logo as the target object, meanwhile, dividing our framework into three different parts: feature selection part, tunning classifier part and capturing location part, which using pure images with target, pure images with any team logos and origin photos as input, respectively.
+#The images, marked as positive or negative respectively, were later used to train our classifier. In the test stage, we sample some real world objects and try to detect them in photos.
 
 ## Project Introduction
 
