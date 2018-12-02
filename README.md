@@ -18,7 +18,7 @@ This project addresses the problem of detecting object location in object recogn
 ## Project Introduction
 
 <p align="center">
-  <img src="flowchart.png" height="500" width="800"><br/>
+  <img src="flowchart.png" height="500" width="750"><br/>
   <h6 align="center">Flowchart</h6><br/>
 </p><br/>
 
