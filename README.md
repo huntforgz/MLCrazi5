@@ -19,7 +19,7 @@ This project addresses the problem of detecting object location in object recogn
 ## Project Introduction
 
 <p align="center">
-  <img src="flowchart.png" height="500" width="750"><br/>
+  <img src="/Image/flowchart.png" height="500" width="750"><br/>
   <h6 align="center">Figure 1: Flowchart</h6><br/>
 </p><br/>
 
@@ -52,10 +52,15 @@ The target in each experiment is shown in Figure 2 and 3, respectively.
 
 ## Evaluation
 First, in the comparative experiment of Step2, we tune each classifier and compare them based on precision, recall and F1-Score. In practice, we prefer choosing the one with highest F1-Score rather than other metrices, because the F1 score is the harmonic average of the precision and recall.  
-The comparative result is shown in Fig.4:
+The comparative result is shown in Fig.4 and Fig.5:
 <p align="center">
-  <img src="/Image/result_exp.png" height="300" width="400"><br/>
-  <h6 align="center">Figure 4: The result in the comparative experiment</h6><br/>
+  <img src="/Image/result_lakers.png" height="300" width="400"><br/>
+  <h6 align="center">Figure 4: The result in the comparative experiment of detecting team loge</h6><br/>
+</p><br/>
+
+<p align="center">
+  <img src="/Image/result_toy.png" height="300" width="400"><br/>
+  <h6 align="center">Figure 5: The result in the comparative experiment of detecting toy</h6><br/>
 </p><br/>
 
 Secondly, for a new photos in the Step3, we consider the potential location of the object based on the 'confidence' of each sub-graph labeled 1. For SVM, we interpret the 'confidence' as the distance of the sub-graph to the separating hyperplane. For others, it is the estimated probability of the sub-graph aligned for class 1.
@@ -71,6 +76,6 @@ Secondly, for a new photos in the Step3, we consider the potential location of t
 
 <p align="center">
   <img src="\Image\result.png" height="350" width="400"><br/>
-  <h6 align="center">Figure 5: Output of Detecting Lakers Logo</h6><br/>
+  <h6 align="center">Figure 6: Output of Detecting Lakers Logo</h6><br/>
 </p><br/>
 
