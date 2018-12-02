@@ -79,3 +79,8 @@ Secondly, for a new photos in the Step3, we consider the potential location of t
   <h6 align="center">Figure 6: Output of Detecting Lakers Logo</h6><br/>
 </p><br/>
 
+<p align="center">
+  <img src="\Image\result_toy.png" height="500" width="200"><br/>
+  <h6 align="center">Figure 7: Output of Detecting toy</h6><br/>
+</p><br/>
+
