@@ -54,12 +54,12 @@ The target in each experiment is shown in Figure 2 and 3, respectively.
 First, in the comparative experiment of Step2, we tune each classifier and compare them based on precision, recall and F1-Score. In practice, we prefer choosing the one with highest F1-Score rather than other metrices, because the F1 score is the harmonic average of the precision and recall.  
 The comparative result is shown in Fig.4 and Fig.5:
 <p align="center">
-  <img src="/Image/result_lakers.png" height="300" width="400"><br/>
+  <img src="/Image/result_lakers.png" height="250" width="400"><br/>
   <h6 align="center">Figure 4: The result in the comparative experiment of detecting team loge</h6><br/>
 </p><br/>
 
 <p align="center">
-  <img src="/Image/result_toy.png" height="300" width="400"><br/>
+  <img src="/Image/result_toy.png" height="250" width="400"><br/>
   <h6 align="center">Figure 5: The result in the comparative experiment of detecting toy</h6><br/>
 </p><br/>
 
