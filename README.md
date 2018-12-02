@@ -80,7 +80,7 @@ Secondly, for a new photos in the Step3, we consider the potential location of t
 </p><br/>
 
 <p align="center">
-  <img src="\Image\result_toy.jpg" height="350" width="100"><br/>
+  <img src="\Image\result_toy.jpg" height="350" width="200"><br/>
   <h6 align="center">Figure 7: Output of Detecting toy</h6><br/>
 </p><br/>
 
