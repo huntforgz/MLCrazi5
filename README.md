@@ -13,9 +13,15 @@ FeatureCompute.py provides a method to generate Training Data to train your clas
 
 
 ## Project Abstract
-This project mainly implements Adaboost classifier with different learners to make a framework used to detect specific objects in the image(in demo we use NBA basketball team Lakers logo). Instead of using deep learning frame such as RCNN or CNN, we use SIFT method(with OpenCV) to extract features and bounding box method to detect potential target to improve time cost/performance. A bunch of objects, marked as positive or negative respectively, were later used to train our classifier. In the test stage, we sample some real world objects and try to detect them in photos.
+This project addresses the problem of detecting object location in object recognition. More specifically, we implements general classifiers with special feature detection algorithm to make a framework used to detect specific object locations in the image(in demo we use NBA basketball team Lakers logo). Instead of using deep learning frame such as RCNN or CNN, we combine SIFT and BOW, Selective Search and general classifier models into a single framework to improve time cost/performance. A bunch of objects, marked as positive or negative respectively, were later used to train our classifier. In the test stage, we sample some real world objects and try to detect them in photos.
 
 ## Project Introduction
+
+<p align="center">
+  <img src="flowchart.pdf" height="350" width="800"><br/>
+  <h6 align="center">Login Page</h6><br/>
+</p><br/>
+
 * Feature Selection with SIFT(OpenCV), including:
   - Movie Name, Genre, Publish Year
   - Poster, Video Preview
